@@ -23,11 +23,15 @@ contract ERC20 is IERC20 {
       price = initialPrice; // Устанавливаем цену 
     }
 
-    // Функция для обновления цены токена
-    function setPrice(uint256 newPrice) external {
-    // Здесь можно добавить проверку прав доступа
-        price = newPrice;
+    modifier onlyOwner() virtual {
+      require(msg.sender == owner, "Caller is not the owner");
+      _;
     }
+
+    function setPrice(uint256 newPrice) external onlyOwner {
+      price = newPrice;
+    }
+
 
     function name() public view override returns (string memory) {
         return _name;
@@ -113,3 +117,4 @@ contract ERC20 is IERC20 {
         emit Transfer(owner, recipient, amount);
     }
 }
+
